@@ -13,11 +13,6 @@ library(shiny)
 
 source('functions.R')
 
-socks <- read.csv("socks.csv", stringsAsFactors = F)
-socks$date <- as.Date(socks$date)
-min_date <- min(socks$date)
-max_date <- max(socks$date)
-
 # Define UI for application that draws a histogram
 ui <- fluidPage(
    
@@ -29,9 +24,9 @@ ui <- fluidPage(
       sidebarPanel(
         sliderInput("Date",
                     "Date",
-                    min = as.Date(min_date,"%m/%d/%y"),
-                    max = as.Date(max_date,"%m/%d/%y"),
-                    value=as.Date(max_date),
+                    min = as.Date('2017-09-28'),
+                    max = Sys.Date(),
+                    value=Sys.Date(),
                     timeFormat="%m/%d/%y")
       ),
       
@@ -44,10 +39,10 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-   
-   output$distPlot <- renderPlot({
-     sock_histogram(socks, input$Date)
-   })
+  socks <- read.csv("socks.csv", stringsAsFactors = F)
+  output$distPlot <- renderPlot({
+   sock_histogram(socks, input$Date)
+  })
 }
 
 # Run the application 
